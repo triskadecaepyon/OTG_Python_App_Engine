@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>OTG Example</title>
+
+</head>
+
+<body>
+
+<div class="site-wrapper">
+<h1>Your Site Content Here!</h1>
+    {% ifnotequal name None %}
+        User name: {{name}}
+    {% endifnotequal %}
+
+    {% ifnotequal login None %}
+        <a href="{{login}}">Login</a>
+    {% endifnotequal %}
+
+    {% ifnotequal logout None %}
+        <a href="{{logout}}">Logout</a>
+    {% endifnotequal %}
+
+
+</div>
+</body>
+</html>
+
