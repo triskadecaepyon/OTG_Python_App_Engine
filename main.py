@@ -17,8 +17,6 @@
 
 import os
 import logging
-import re
-import json
 import webapp2
 
 # This specific section allows for python
@@ -42,7 +40,7 @@ import worker
 # --------------------------------------------------------------------------
 
 
-def renderPage(handler, tname='front_page.htm', values={}):
+def render_page(handler, tname='front_page.htm', values={}):
     temp = os.path.join(
         os.path.dirname(__file__), 'templates/' + tname)
     if not os.path.isfile(temp):
@@ -73,16 +71,16 @@ class MainHandler(webapp2.RequestHandler):
         if user:
             logout = users.create_logout_url('/')
             name = users.User.email(user)
-            # Register user, will return if already registered
+            # Register user; will return if already registered
             worker.register_user(user)
-            renderPage(self, 'front_page.htm', {'logout': logout, 'name': name})
+            render_page(self, 'front_page.htm', {'logout': logout, 'name': name})
         else:
             login = users.create_login_url(self.request.uri)
-            renderPage(self, 'front_page.htm', {'login': login})
+            render_page(self, 'front_page.htm', {'login': login})
 
     def post(self):
-        #Use this to handle POST calls within Main Handler
-        print "Post on MainHandler"
+        # Use this to handle POST calls within Main Handler
+        print "Post on MainHandler (Fill this method in or delete if needed)"
 
 # Adding additional classes: For each additional "View", add classes and matching
 # url routers below in the webapp2.WSGIApplication list.

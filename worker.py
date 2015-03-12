@@ -1,11 +1,9 @@
 import sys
-from google.appengine.ext import ndb
-import datetime
-import re
 sys.path.insert(0, 'support_packages')
 sys.path.insert(0, 'backend_python_files')
 
 from google.appengine.api import users, memcache
+from google.appengine.ext import ndb
 
 # How to get backend python files and support packages into
 # the worker.py file
@@ -25,22 +23,20 @@ DEFAULT_SCHEMA_NAME = 'default'
 # types of properties used in the data store.
 # --------------------------------------------------------------------------
 
+
 def stream_key(streambook_name=DEFAULT_SCHEMA_NAME):
-    """Constructs a Datastore key for a Stream entity with stream name."""
     return ndb.Key('OTG', streambook_name)
 
 
-class OTG_model_user(ndb.Model):
-    """Models an individual user"""
+class OTGModelUser(ndb.Model):
     user = ndb.UserProperty()
     name = ndb.StringProperty(indexed=True)
     added_date = ndb.DateTimeProperty(auto_now_add=True)
 
 
-class OTG_model_items(ndb.Model):
+class OTGModelItems(ndb.Model):
     uniqueID = ndb.StringProperty(indexed=True)
     date = ndb.DateTimeProperty(auto_now_add=True)
-    #link to a taste profile
 
 
 # --------------------------------------------------------------------------
@@ -94,23 +90,19 @@ for additional web app functionality.
 
 
 def register_user(user):
-    print "registering user"
     found_id = False
     # Check if the user exists already
-    user_query = OTG_model_user.query(OTG_model_user.user == user)
+    user_query = OTGModelUser.query(OTGModelUser.user == user)
     for key in user_query.iter(keys_only=True):
         if key:
             found_id = True
-
     if found_id:
-        print "user already registered"
+        # user is already registered
         return
     else:
-        print "create new user in data store"
         # Access the main data store schema
-        user_store = OTG_model_user(parent=stream_key(DEFAULT_SCHEMA_NAME))
+        user_store = OTGModelUser(parent=stream_key(DEFAULT_SCHEMA_NAME))
 
         user_store.name = users.User.email(user)
         user_store.user = user
-
         user_store.put()
